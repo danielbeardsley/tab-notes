@@ -33,6 +33,11 @@ export function set(storageObj) {
     localStorage.setItem('notesStorageHTML', JSON.stringify(storageObj));
 }
 
+export function newNoteid() {
+    var date = new Date();
+    return date.getTime();
+}
+
 function migrate(oldStorageObj) {
     newStorageObj = notesStorage.create();
     var newNotesObj = newStorageObj.notes;

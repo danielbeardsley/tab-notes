@@ -3,7 +3,7 @@ import * as settingsStorage from '../common/settingsStorage.js';
 
 function initiateNote() {
   var noteContainer = document.getElementById('js-note-container');
-  var noteId = window.location.hash.substring(1);
+  var noteId = getNoteidFromUrl() || notesStorage.newNoteid();
   noteContainer.focus();
   
   function newNote() {
@@ -13,6 +13,10 @@ function initiateNote() {
     note.dateModified = Date.now();
     note.dateCreated = Date.now();
     return note;
+  }
+
+  function getNoteidFromUrl() {
+    return window.location.hash.substring(1);
   }
 
   function getNote(noteId) {
@@ -51,6 +55,7 @@ function initiateNote() {
       // Display sanitized title and amount of text
       saveNote(noteId, noteText);
       setDocumentTitle(noteText);
+      setDocumentUrl();
       setProperFavicon(noteText.length);
     }, 250);
 
@@ -71,6 +76,12 @@ function initiateNote() {
       case (content != ""):
         document.title = content;
         break;
+    }
+  }
+
+  function setDocumentUrl() {
+    if (getNoteidFromUrl() !== noteId) {
+       window.location.hash = noteId;
     }
   }
 
