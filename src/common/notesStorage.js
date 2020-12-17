@@ -30,12 +30,24 @@ export function getString()
 }
 
 export function set(storageObj) {
+    filterBlankNotes(storageObj);
     localStorage.setItem('notesStorageHTML', JSON.stringify(storageObj));
 }
 
 export function newNoteid() {
     var date = new Date();
     return date.getTime();
+}
+
+function filterBlankNotes(storageObj) {
+    if (storageObj && storageObj.notes) {
+        Object.keys(storageObj.notes).forEach(function(noteId) {
+            let note = storageObj.notes[noteId];
+            if (!note.content || !note.content.length) {
+                delete storageObj.notes[noteId];
+            }
+        });
+    }
 }
 
 function migrate(oldStorageObj) {
