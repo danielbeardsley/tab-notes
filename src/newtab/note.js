@@ -58,9 +58,13 @@ function initiateNote() {
   }
 
   function setDocumentTitle(contentHtml) {
-    // sanitize a greater portion of the content than the desired title substring 
-    //  length to avoid incomplete html elements, e.g., "&lt;", left unsanitized
-    var content = sanitizeHtml(contentHtml.substring(0, 40), { allowedTags: [], allowedAttributes: {} }).substring(0, 20);
+    // Try to grab the first "line" of text for a title.
+    // Dtrip every but divs, replace all divs with new lines,
+    // then get the first line
+    const justDivs = sanitizeHtml(contentHtml.substring(0, 100), { allowedTags: ['div'], allowedAttributes: {} });
+    const withNewlines = justDivs.replace(/<\/?div[^>]*>/g, "\n").trim();
+    const firstLine = withNewlines.replace(/\n.*$/, "").trim();
+    const content = firstLine.substring(0, 20);
 
     switch (true) {
       case (content === ""):
